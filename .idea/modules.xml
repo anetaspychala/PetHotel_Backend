@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/SpringSecurity_BackendPart.iml" filepath="$PROJECT_DIR$/.idea/SpringSecurity_BackendPart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PetHotel_BackendPart.iml" filepath="$PROJECT_DIR$/.idea/PetHotel_BackendPart.iml" />
     </modules>
   </component>
 </project>
