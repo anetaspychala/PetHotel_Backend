@@ -1,5 +1,7 @@
 package org.example.pet.model;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.example.pet.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,14 +12,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Setter
+@Getter
 @Table(name = "users")
 @Entity
+@RequiredArgsConstructor
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(generator = "users_id_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq", allocationSize = 1)
-    private long id;
-    private String uuid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String login;
     private String password;
     private String email;
@@ -28,27 +30,11 @@ public class User implements UserDetails {
     @Column(name = "is_enabled")
     private boolean isEnabled;
 
-    public User(){
-        generateUuid();
-    }
-    public User(long id, String uuid, String login, String password, String email, Role role, boolean isLock, boolean isEnabled) {
-        this.id = id;
-        this.uuid = uuid;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.isLock = isLock;
-        this.isEnabled = isEnabled;
-        generateUuid();
-    }
     public Role getRole(){
         return this.role;
     }
-    public String getUuid(){
-        return this.uuid;
-    }
-    private long getId(){
+
+    public Long getId(){
         return id;
     }
     public String getEmail() {
@@ -91,9 +77,5 @@ public class User implements UserDetails {
         return isEnabled;
     }
 
-    private void generateUuid(){
-        if(uuid== null || uuid.equals("")){
-            setUuid(UUID.randomUUID().toString());
-        }
     }
-}
+

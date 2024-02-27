@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.pet.dto.UserRegisterDto;
+import org.example.pet.dto.UserDto;
 import org.example.pet.entity.*;
 import org.example.pet.model.User;
 import org.example.pet.exceptions.UserExistingWithEmail;
@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,8 +42,42 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword())); //przed dodaniem hasla do bazy, zamienimy haslo na enkodowane
         return userRepository.saveAndFlush(user);
     }
-    public List<User> getUserList(){
-        return userRepository.findAll();
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+    public List<UserDto> getUserDtoList() {
+        List<User> userList = userRepository.findAll();
+
+        return userList.stream()
+                .map(this::mapUserToUserDto)
+                .collect(Collectors.toList());
+    }
+
+    private UserDto mapUserToUserDto(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .login(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .role(user.getRole())
+                .build();
+    }
+
+    public UserDto editUser(Long id, UserDto updatedUserDto) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (userOptional.isPresent()) {
+            User existingUser = userOptional.get();
+            existingUser.setEmail(updatedUserDto.getEmail());
+            existingUser.setLogin(updatedUserDto.getLogin());
+            existingUser.setPassword(updatedUserDto.getPassword());
+            existingUser.setRole(updatedUserDto.getRole());
+            User updatedUser = userRepository.save(existingUser);
+            return mapUserToUserDto(updatedUser);
+        } else {
+            throw new NoSuchElementException("User with id " + id + " not found");
+        }
     }
     public String genarateToken(String username, int exp){
         return jwtService.generateToken(username, exp);
@@ -67,7 +104,7 @@ public class UserService {
         }
     }
 
-    public void register(UserRegisterDto userRegisterDto) throws UserExistingWithEmail, UserExistingWithName{
+    public void register(UserDto userRegisterDto) throws UserExistingWithEmail, UserExistingWithName{
       userRepository.findUserByLogin(userRegisterDto.getLogin()).ifPresent(value -> {
           throw new UserExistingWithName("Użytkownik o tej nazwie juz istnieje");
       });
@@ -92,7 +129,7 @@ public class UserService {
                 && authRequest.getPassword().equals(hardcodedAdminPassword)) {
             // Return the admin role
             return ResponseEntity.ok(
-                    UserRegisterDto.builder()
+                    UserDto.builder()
                             .login(hardcodedAdminUsername)
                             .role(Role.ADMIN)
                             .build());
@@ -107,7 +144,7 @@ public class UserService {
                 response.addCookie(cookie);
                 response.addCookie(refresh);
                 return ResponseEntity.ok(
-                        UserRegisterDto
+                        UserDto
                                 .builder()
                                 .login(user.getUsername())
                                 .email(user.getEmail())

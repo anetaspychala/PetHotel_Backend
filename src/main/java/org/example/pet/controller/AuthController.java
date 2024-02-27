@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.pet.dto.UserRegisterDto;
+import org.example.pet.dto.UserDto;
 import org.example.pet.entity.*;
 import org.example.pet.exceptions.UserExistingWithEmail;
 import org.example.pet.exceptions.UserExistingWithName;
@@ -25,9 +25,9 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> addUser(@Valid @RequestBody UserRegisterDto user){
+    public ResponseEntity<?> addUser(@Valid @RequestBody UserDto userDto){
         try{
-        userService.register(user);
+        userService.register(userDto);
     return ResponseEntity.ok(new AuthResponse(Code.SUCCESS));}
         catch (UserExistingWithName e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthResponse(Code.A4));
