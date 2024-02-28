@@ -25,8 +25,6 @@ public class ReservationDto {
 
     private String additionalTreatment;
 
-/*    private String userName;
-
-    private Long animalId;*/
+    private Long animalId;
 
 }

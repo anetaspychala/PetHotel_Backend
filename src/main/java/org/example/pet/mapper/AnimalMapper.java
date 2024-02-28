@@ -12,9 +12,8 @@ public class AnimalMapper {
         animalDto.setName(animalModel.getName());
         animalDto.setWeight(animalModel.getWeight());
         animalDto.setSex(animalModel.getSex());
-   /*     if(animalModel.getUser()!=null){
-            animalDto.setUserName(animalModel.getUser().getUsername());
-        }*/
+        if(animalModel.getUser()!=null){
+            animalDto.setOwnerId(animalModel.getUser().getId());}
         return animalDto;
     }
 

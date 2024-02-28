@@ -20,8 +20,8 @@ public class AnimalService {
 
     public AnimalDto addAnimal(AnimalDto animalDto) {
         AnimalModel animalModel = AnimalMapper.toAnimalModel(animalDto);
-       /* User userModel = userRepository.findUserByLogin(animalDto.getUserName()).orElseThrow();
-        animalModel.setUser(userModel);*/
+        User userModel = userRepository.findById(animalDto.getOwnerId()).orElseThrow();
+        animalModel.setUser(userModel);
         AnimalModel addAnimal = animalRepository.save(animalModel);
         return AnimalMapper.toAnimalDto(addAnimal);
     }

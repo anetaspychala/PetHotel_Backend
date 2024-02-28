@@ -15,10 +15,8 @@ public class ReservationMapper {
         reservationDto.setAnimalSize(reservationModel.getAnimalSize());
         reservationDto.setAdditionalTreatment(reservationModel.getAdditionalTreatment());
         reservationDto.setReservationStatus(reservationModel.getReservationStatus());
-/*        if(reservationModel.getUser()!=null){
-        reservationDto.setUserName(reservationModel.getUser().getUsername());}
         if(reservationModel.getAnimal()!=null){
-        reservationDto.setAnimalId(reservationModel.getAnimal().getId());}*/
+        reservationDto.setAnimalId(reservationModel.getAnimal().getId());}
         return reservationDto;
     }
 
@@ -35,5 +33,3 @@ public class ReservationMapper {
         return reservationModel;
     }
 }
-
-//do dodania sa add animal i room

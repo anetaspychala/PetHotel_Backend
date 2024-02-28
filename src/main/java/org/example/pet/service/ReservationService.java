@@ -25,10 +25,8 @@ public class ReservationService {
     private final AnimalRepository animalRepository;
     public ReservationDto addReservation(ReservationDto reservationDto) {
             ReservationModel reservationModel = ReservationMapper.toReservationModel(reservationDto);
-          /*  User userModel = userRepository.findUserByLogin(reservationDto.getUserName()).orElseThrow();
-            reservationModel.setUser(userModel);
-            AnimalModel animalModel = animalRepository.findById(reservationDto.getAnimalId()).orElseThrow();
-            reservationModel.setAnimal(animalModel);*/
+            AnimalModel animalModel = animalRepository.findById(reservationDto.getId()).orElseThrow();
+            reservationModel.setAnimal(animalModel);
             ReservationModel addReservation = reservationRepository.save(reservationModel);
             return ReservationMapper.toReservationDto(addReservation);
         }

@@ -11,6 +11,6 @@ public class AnimalDto {
     private Integer weight;
     private String name;
     private String sex;
-    private String userName;
-  //  private Set<Long> reservationIds;
+    private Long ownerId;
+
 }
